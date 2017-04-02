@@ -1,0 +1,198 @@
+<ion-view view-title="Home" name="Home View" ng-init="dashboardLoad()">
+
+  <ion-side-menus>  
+  <ion-side-menu-content>
+  <ion-header-bar class="bar-dark" style="height: 61px;">
+   <div class="buttons" >
+      <button class="button icon button-clear ion-navicon-round"  ng-click="toggleLeft()"></button>
+      <ngcart-summary  font-size: 15px;font-weight: bold;"></ngcart-summary>
+      <br></br>
+       <button class="button icon button-clear ion-bag"ng-click="shoppingbag()" > 
+      </button> 
+   </div>
+  </ion-header-bar>
+  <ion-content class="card-background-page" style="background-color: #48786C">
+      <br></br>
+        <label class="item item-input" style="height: 74px;">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" placeholder="Search Fisher Products" ng-model="searchitem"   />
+      </label>
+
+
+      <ion-slide-box show-pager="true" on-slide-changed="slideHasChanged($index)">
+         <ion-slide>
+         <span>
+         <h4>Welcome to Fisher Community!!!!! </h4>
+         <img src="img\img_mountains_wide.jpg" style="width: 100%;height: 100%"> </span>
+         </ion-slide>
+
+         <ion-slide>
+         <span>
+         <h4>Buy incredible Fish only on Fisher Conn!!!!</h4>
+         <img src="img\img_nature_wide.jpg" style="width: 100%;height: 100%"> </span>
+         </ion-slide>
+
+         <ion-slide>
+         <span>
+         <h4>Fresh Pond Water Also Available!</h4>
+         <img src="img\img_fjords_wide.jpg" style="width: 100%;height: 100%"  > </span>
+         </ion-slide>
+         </ion-slide-box>
+    
+         <div  ng-repeat="products in product | filter:searchitem"  >
+          <div class="card" style="width: 90%;height: 50%">
+              <img src="{{products.productImage}}" alt="Avatar" style="width : 100% ; height : 100% " >
+              <div class="container">
+              <p style="font-size: 35px; font-family: arial;font-weight: bold;">Name: {{products.productname}}</p>
+              <p style="font-size: 25px; font-family: arial;font-weight: bold;">Description: {{products.productdesc}}</p>
+              <p style="font-size: 30px; font-family: arial;font-weight: italic;">Price: ${{products.productprice}}</p>
+              
+              <ngcart-addtocart type="button" id="item{{products.productid}}" name="{{products.productname}}" price="{{products.productprice}}" quantity="1" quantity-max="15">Add to Cart</ngcart-addtocart>
+               </div>
+          </div>
+        </div>
+
+      
+<script type="text/ng-template" id="template/ngCart/summary.html"><div class="row">
+ 
+    <div class="col-md-6">{{ ngCart.getTotalItems() }}
+        <ng-pluralize count="ngCart.getTotalItems()" when="{1: 'item', 'other':'items'}"></ng-pluralize>
+        <br />{{ ngCart.totalCost() | currency }}
+    </div>
+</div>
+</script>
+
+
+<script type="text/ng-template" id="template/ngCart/cart.html">
+<div class="alert alert-danger" role="alert" ng-show="ngCart.getTotalItems() === 0">
+    Your cart is empty test
+</div>
+
+<div class="table-responsive col-lg-12" ng-show="ngCart.getTotalItems() > 0">
+
+    <table class="table table-striped ngCart cart">
+
+        <thead>
+        <tr>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <hr>
+        <tfoot>
+        <tr ng-show="ngCart.getTax()">
+            
+            <td></td>
+            <td>Tax ({{ ngCart.getTaxRate() }}%):</td>
+            <td>{{ ngCart.getTax() | currency }}</td>
+        </tr>
+        <tr ng-show="ngCart.getShipping()">
+            
+            <td></td>
+            <td>Shipping:</td>
+            <td>{{ ngCart.getShipping() | currency }}</td>
+        </tr>
+        <tr>
+            
+            <td></td>
+            <td>Total:</td>
+            <td>{{ ngCart.totalCost() | currency }}</td>
+        </tr>
+        </tfoot>
+        <tbody>
+        <tr ng-repeat="item in ngCart.getCart().items track by $index">
+            <td><span ng-click="ngCart.removeItemById(item.getId())" class="button button-assertive ion-close-round"></span></td>
+<!--  getName() -->
+            <td>{{ item.getName() }}</td>
+            <td><span class="button button-positive ion-minus-round" ng-class="{'disabled':item.getQuantity()==1}"
+                      ng-click="item.setQuantity(-1, true)"></span>&nbsp;&nbsp;
+                {{ item.getQuantity() | number }}&nbsp;&nbsp;
+                <span class="button button-positive ion-plus-round" ng-click="item.setQuantity(1, true)"></span></td>
+            <td>{{ item.getPrice() | currency}}</td>
+            <td>{{ item.getTotal() | currency }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</script>
+
+<script type="text/ng-template" id="template/ngCart/addtocart.html"><div ng-hide="attrs.id">
+    <button class="button button button-positive" ng-disabled="true" ng-transclude></button>
+
+</div>
+<div ng-show="attrs.id">
+    <div>
+        <span  ng-show="quantityMax">
+            <select selected="1" name="quantity" id="quantity" ng-model="q"
+                    ng-options=" v for v in qtyOpt" style="width: 60px;background-color: rgb(218, 165, 32);border-color: rgb(0,0,0);"  ></select>
+        </span>
+        
+        <button class="button button button-dark"
+           ng-click="ngCart.addItem(id, name, price, q, data)"
+           ng-transclude></button>   
+    </div>
+    <mark  ng-show="inCart()">
+        This item is in your cart. <a ng-click="ngCart.removeItemById(id)" style="cursor: pointer;">Remove</a>
+    </mark>
+</div>
+</script>
+
+<script type="text/ng-template" id="template/ngCart/checkout.html">
+    
+<div ng-if="service=='http' || service == 'log'">
+    <button class="btn btn-primary" ng-click="checkout()" ng-disabled="!ngCart.getTotalItems()" ng-transclude>Checkout</button>
+</div>
+
+
+<div ng-if="service=='paypal'">
+
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" ng-show="ngCart.getTotalItems()">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" value="{{ settings.paypal.business }}">
+        <input type="hidden" name="lc" value="CA">
+        <input type="hidden" name="item_name" value="{{ settings.paypal.item_name }}">
+        <input type="hidden" name="item_number" value="{{ settings.paypal.item_number }}">
+        <input type="hidden" name="amount" value="{{ ngCart.getSubTotal()}}">
+        <input type="hidden" name="currency_code" value="{{ settings.paypal.currency_code }}">
+        <input type="hidden" name="button_subtype" value="services">
+        <input type="hidden" name="no_note" value="0">
+        <input type="hidden" name="tax_rate" value="{{ ngCart.getTaxRate()}}">
+        <input type="hidden" name="shipping" value="{{ ngCart.getShipping()}}">
+        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHostedGuest">
+        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+    </form>
+
+</div>
+    
+</script>
+
+</ion-content>
+
+</ion-side-menu-content>
+<ion-side-menu side="left">
+
+  <ul class="list">
+          <div class="item item-avatar" style="size: 1200px">
+            <img src="img/fisher.png"> 
+            <h2>Welcome Jarr!!</h2>
+            <p>Your Profile</p>
+          </div>
+          <a href="#/event/check-in" class="item icon-left ion-home" menu-close> Home</a>
+          <a href="" class="item icon ion-person-stalker" ng-click="sideAcctSett()"> Account Settings</a>
+          <a href="" class="item icon ion-gear-b" ng-click="sideAcctSett()" menu-close> Privacy Settings</a>
+
+          <a href="#/event/prices" class="item icon ion-clock" ng-click="orderhistory()"> Orders History</a>
+          <a href="#/event/prices" class="item icon ion-social-usd" menu-close> My Payments</a>
+          <a class="button icon-left ion-chevron-left button-clear button-dark" ng-click="logout()">Log out</a> 
+  </ul>
+</ion-side-menu>
+</ion-side-menus>
+</ion-view>
+
+
+
+
+

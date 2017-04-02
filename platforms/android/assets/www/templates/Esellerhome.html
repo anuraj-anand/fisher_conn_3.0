@@ -1,0 +1,54 @@
+<ion-view view-title="Eseller" name="Eseller-view">
+<ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+      </ion-nav-bar>
+  		<ion-content class="padding">
+
+      <h1>Add Fish Products from below List</h1>
+      <div class="row">
+      <div class="col">
+
+    <div  data-ng-repeat="choice in choices">
+          <select ng-option="choice.selectedName">
+             <option selected>Select fish product from drop down</option> 
+             <option>Katla</option>
+             <option>Rohu</option>
+             <option>Promfret</option>
+             <option>Katla</option>
+             <option>Rohu</option>
+             <option>Promfret</option>
+             <option>Katla</option>
+             <option>Rohu</option>
+             <option>Promfret</option>
+             <option>Katla</option>
+             <option>Rohu</option>
+             <option>Promfret</option>
+          </select>
+          </div>
+       </div>
+
+  
+    <div class="col">
+      
+    
+       <input type="number" style="border: 3px solid rgb(171, 239, 171);width: 200px" ng-model="choice.qty" placeholder="Enter fish Quantity in Kg">
+    
+    </div>
+    <div class="col">
+          <input type="number" style="border: 3px solid rgb(171, 239, 171);" ng-model="choice.price" placeholder="Enter fish Price">
+     
+    </div>
+    <div class="col">
+ <button class="button button button-dark ion-android-add-circle" ng-click="addNewChoice()">Add More Fish Products</button>
+ <br></br>
+ <button class="button button button-dark ion-android-remove-circle" ng-click="removeChoice()">Remove Product</button>
+
+</div>
+
+</div>
+
+<h1>{{choice}}</h1> 
+<button class="button button button-dark" ng-click="pushtodatabse()">Put for Sale</button>   
+  </ion-content>
+</ion-view>
