@@ -1,8 +1,8 @@
 angular.module('starter.controllers', [])
 
 .controller ('AppCtrl', ['$scope', '$http', 'ngCart', function($scope, $http, ngCart) {
-    ngCart.setTaxRate(4.5);
-    ngCart.setShipping(2.9);    
+    ngCart.setTaxRate(7.5);
+    ngCart.setShipping(2.99);    
 }])
 
 
@@ -14,30 +14,51 @@ angular.module('starter.controllers', [])
       $scope.itemlist=[];
       $scope.value = 0;
       $scope.ball = 0;
+      $scope.signup = {};
+      $scope.recover = {};
 
-
-       $scope.itemTotal=[];
-       $scope.shipcharge=0;
+      $scope.itemTotal=[];
+      $scope.shipcharge=0;
       $scope.totaloutstand=0;
 
-        $scope.tax=0;
-        $scope.count=0;
-        $scope.cnt=0;
-        $scope.itemgroup=[];
-        $scope.itemfish=[];
-        $scope.itemfish.fishname=0;
-        $scope.fishprice=0;
-        $scope.itemfish.fishid=0;
-        $scope.itemfish.fishprice=0; 
+      $scope.tax=0;
+      $scope.count=0;
+      $scope.cnt=0;
+      $scope.itemgroup=[];
+      $scope.itemfish=[];
+      $scope.itemfish.fishname=0;
+      $scope.fishprice=0;
+      $scope.itemfish.fishid=0;
+      $scope.itemfish.fishprice=0; 
+      $scope.edit={};
+ 
+ 
+
+    $ionicModal.fromTemplateUrl('templates/changePassword.html', {
+        scope: $scope
+      }).then(function(modal) {
+         $scope.modalChange = modal;
+      });
 
 
-   
 
+
+    $ionicModal.fromTemplateUrl('templates/editProfile.html', {
+        scope: $scope
+      }).then(function(modal) {
+         $scope.modalEdit = modal;
+      });
+
+
+     
     $ionicModal.fromTemplateUrl('templates/cart.html', {
         scope: $scope
       }).then(function(modal) {
          $scope.modal = modal;
       });
+
+
+
 
     $scope.login = function() {
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
@@ -50,29 +71,188 @@ angular.module('starter.controllers', [])
         });
     }
 
-   
-
-      $scope.ratingsObject = {
-        iconOn : 'ion-ios-star',
-        iconOff : 'ion-ios-star-outline',
-        iconOnColor: 'rgb(200, 200, 100)',
-        iconOffColor:  'rgb(200, 100, 100)',
-        rating:  3,
-        minRating:1,
-        callback: function(rating) {
-          $scope.ratingsCallback(rating);
-        }
-      }
-
-      $scope.ratingsCallback = function(rating) {
-        //console.log('Selected rating is : ', rating);
-      }
 
 
+    $scope.Signup = function() {
 
+
+    $scope.signup.username;
+    $scope.signup.email;
+    $scope.signup.phoneno;
+    $scope.signup.value;
+    $scope.signup.type;
+    $scope.signup.password;
+    //console.log(""+JSON.stringify($("#loader").show());
+    $("#loader").show();
+    alert("Inside the Signup call username--"+JSON.stringify($scope.signup.username));
+    alert("Inside the Signup email call"+JSON.stringify($scope.signup.email));
+    alert("Inside the Signup phone call"+JSON.stringify($scope.signup.phoneno));
+    alert("Inside the Signup phone call"+JSON.stringify($scope.signup.password));
+    alert("Inside the Signup checkbox call"+JSON.stringify($scope.signup.value));
+    alert("Inside the Signup customer type call"+JSON.stringify($scope.signup.type));
+    var api_register_uri="http://127.0.0.1:8000/rest-auth/registration/";        
+
+
+
+var dataObj = {
+        username : $scope.signup.username,
+        email : $scope.signup.email,
+        password1 : $scope.signup.password,
+        password2:$scope.signup.password
+    };  
+    var res = $http.post(api_register_uri, dataObj);
+    res.success(function(data, status, headers, config) {
+      $scope.message = data;
+alert("successs"+$scope.message);
+
+            var alertPopup = $ionicPopup.alert({
+                title: 'Successfully Registered',
+                template: data.username
+            });
+$("#loader").hide();
+
+    });
+    res.error(function(data, status, headers, config) {
+     alert( "failure message status: " + JSON.stringify(status));
+     alert( "failure message data: " + JSON.stringify(data));
+
+          
+
+    
+            var alertPopup = $ionicPopup.alert({
+                title: 'Signup failed!',
+                template: data.username
+            });status
+  
+      $("#loader").show();
+    }); 
+
+
+    }
+
+
+
+
+
+
+    $scope.EditSave = function() {
+
+
+    $scope.edit.firstname;
+    $scope.edit.lastname;
+    $scope.edit.gender;
+    $scope.edit.birthdate;
+    $scope.edit.email;
+    $scope.edit.phoneno;
+    $scope.edit.currency;
+    $scope.edit.address;
+    $scope.edit.yourself;
+    //console.log(""+JSON.stringify($("#loader").show());
+    //$("#loader").show();
+    alert("Inside the edit.firstname--"+JSON.stringify($scope.edit.firstname));
+    alert("Inside the edit.lastname"+JSON.stringify($scope.edit.lastname));
+    alert("Inside the gender"+JSON.stringify($scope.edit.gender));
+    alert("Inside the birthdate"+JSON.stringify($scope.edit.birthdate));
+    alert("Inside the email"+JSON.stringify($scope.edit.email));
+    alert("Inside the phone"+JSON.stringify($scope.edit.phoneno));
+    //var api_register_uri="http://127.0.0.1:8000/rest-auth/registration/";        
+
+
+
+var dataObj = {
+        username : $scope.signup.username,
+        email : $scope.signup.email,
+        password1 : $scope.signup.password,
+        password2:$scope.signup.password
+    }; 
+
+
+
+/*    var res = $http.post(api_register_uri, dataObj);
+    res.success(function(data, status, headers, config) {
+      $scope.message = data;
+alert("successs"+$scope.message);
+
+            var alertPopup = $ionicPopup.alert({
+                title: 'Successfully Registered',
+                template: data.username
+            });
+$("#loader").hide();
+
+    });
+    res.error(function(data, status, headers, config) {
+     alert( "failure message status: " + JSON.stringify(status));
+     alert( "failure message data: " + JSON.stringify(data));
+
+          
+
+    
+            var alertPopup = $ionicPopup.alert({
+                title: 'Signup failed!',
+                template: data.username
+            });status
+  
+      $("#loader").show();
+    }); 
+*/
+
+    }
+
+ 
+
+
+
+
+
+
+   $scope.Recover = function() {
+
+     $scope.recover.email;
+    
+    //console.log(""+JSON.stringify($("#loader").show());
+    $("#loader").show();
+    alert("Inside the Recover email call"+JSON.stringify($scope.recover.email));
+    var api_register_uri="http://127.0.0.1:8000/rest-auth/password/reset/";        
+
+
+
+var dataObj = {
+        
+        email : $scope.recover.email,
+        
+    };  
+    var res = $http.post(api_register_uri, dataObj);
+    res.success(function(data, status, headers, config) {
+      $scope.message = data;
+    alert("successs"+$scope.message);
+
+            var alertPopup = $ionicPopup.alert({
+                title: 'Recover link sent over the email!!!',
+                template: data.username
+              });
+      $("#loader").hide();
+
+    });
+    res.error(function(data, status, headers, config) {
+     alert( "failure message status: " + JSON.stringify(status));
+     alert( "failure message data: " + JSON.stringify(data));
+
+          
+
+    
+            var alertPopup = $ionicPopup.alert({
+                title: 'Unable to send recover link!! Please retry!!',
+                template: data.username
+            });status
+  
+      $("#loader").show();
+    }); 
+
+}
     $scope.dashboardLoad=function() {
 
-
+   $("#loader").show();
+   
    // alert("Inside the DAshboarddd");
   
       $http.get(dashboardapi,{
@@ -80,53 +260,14 @@ angular.module('starter.controllers', [])
           })
         .success(function(data){
             $scope.product=data;
+        $("#loader").hide();
 
-
-   /* for(var i=0;i<data.length;i++)
-    {*/
-    /*$scope.product=$scope.test[i].productid;*/
-/*
-
-    $scope.product.push($scope.test[i].productid); 
-    $scope.product.push($scope.test[i].productname); 
-    $scope.product.push($scope.test[i].productdesc); 
-    $scope.product.push($scope.test[i].productprice);     
-    }*/
-            
-
-    alert("==success=="+JSON.stringify($scope.product));
-
-//var values = {name: 'misko', gender: 'male'};
-// var itemlist = [];
-// angular.forEach(data, function(value, key) {
-//     alert("--"+key);
-//     alert("value"+JSON.stringify(value));
-//   itemlist.push(itemlist + ': ' + value);
-// }, itemlist);
-
-
-
-/*$scope.itemlist=[
-    
-           {id:data.productid,name:data.productname,price:data.productprice,desc:data.productdesc}
-
-           ];
-*/
-
-
-
-
-/*
-          $scope.itemlist=[
-
-           {id:data.productid,name:data.productname,price:data.productprice,desc:data.productdesc}
-
-           ];*/
-//            alert("==success=="+JSON.stringify(data));
 
         })
         .error(function(data){
 
+
+           $("#loader").hide();
             alert("==error=="+JSON.stringify(data));
         }); 
 
@@ -139,14 +280,6 @@ angular.module('starter.controllers', [])
 
 
 
-
-
-
-
-
-
-
-
 $scope.listDetail=[];
 $scope.itemlist=[
 
@@ -154,35 +287,6 @@ $scope.itemlist=[
 
 
 ];
-
-/*$scope.itemlist=[
-
-{name:'Rehu',id:'Fresh Water Rehu',price:400},
-{name:'Katla',id:'Katla Fresh Water',price:200},
-{name:'Pompfret',id:'Pompfret sea fresh',price:950},
-{name:'Illis',id:'Iillis Fresh Mach',price:100}
-
-
-];
-
-*/
-/*$scope.itemlist=[
-$scope.itemlist=[
-
-{name:'Rehu',id:'Fresh Water Rehu',price:400},
-{name:'Katla',id:'Katla Fresh Water',price:200},
-{name:'Pompfret',id:'Pompfret sea fresh',price:950},
-{name:'Illis',id:'Iillis Fresh Mach',price:100}
-
-
-];
-{name:'Rehu',id:'Fresh Water Rehu',price:400},
-{name:'Katla',id:'Katla Fresh Water',price:200},
-{name:'Pompfret',id:'Pompfret sea fresh',price:950},
-{name:'Illis',id:'Iillis Fresh Mach',price:100}
-
-
-];*/
 
 /*local
 var api_login_uri="http://127.0.0.1:8000/userandaccess/users/1/?format=json";
@@ -197,6 +301,10 @@ var esslerloginapi="https://dry-woodland-53830.herokuapp.com/userandaccess/users
 
 var dashboardapi="https://dry-woodland-53830.herokuapp.com/userandaccess/Products/?format=json";
 $scope.loginSubmit = function() {
+
+
+$("#loader").show();
+
 
 $scope.data.username, $scope.data.password
 
@@ -218,9 +326,9 @@ password:"12345"
          
         })
         .success(function(data){
-            alert("==success=="+JSON.stringify(data));
+          //  alert("==success=="+JSON.stringify(data));
 
-
+            $("#loader").hide();
             if(data.username==$scope.data.username)
             {
              $state.go('home');
@@ -228,21 +336,31 @@ password:"12345"
             else
             {
 
-                alert("Inside the Failed");
-            $state.go('login');
+              //  alert("Inside the Failed");
+              /*
+            $state.go('login');*/
+
+            var alertPopup = $ionicPopup.alert({
+                title: 'Login failed!',
+                template: 'Please check your credentials!'
+            });
             }
 
         })
         .error(function(data){
 
-            alert("==error=="+JSON.stringify(data));
-        }); 
+          var alertPopup = $ionicPopup.alert({
+                title: 'Login failed!',
+                template: 'Please check your credentials!'
+            });
 
+             $("#loader").hide(); 
+            //alert("==error=="+JSON.stringify(data));
+        }); 
 
 }
 
 
-  
 
 $scope.orderhistory = function() {
 
@@ -251,13 +369,16 @@ $scope.orderhistory = function() {
         }
 
     $scope.forgotpassword = function() {
-        $state.go('forgot');
-        }
+
+
+      $state.go('forgot');
+      }
+
 
     $scope.logout = function() {
 
      $scope.modal.hide();
-        alert("kjgk");
+       
          $state.go('login');
         
             }
@@ -384,10 +505,31 @@ $scope.value=qty+1;
       $state.go('shipping');
 
     }
+
+
+    $scope.changePassword = function(){
+$scope.modalChange.show();
+
+      //alert("In the Change Password");
+
+    }
+
+$scope.editProfile = function(){
+$scope.modalEdit.show();
+
+      //alert("In the Change Password");
+
+    }
+
+
+
+
+
 $scope.loginEsseler = function() {
 
+$("#loader").show();
 
-  alert("Inside the Esseler Login");
+ // alert("Inside the Esseler Login");
 
 
 
@@ -408,34 +550,32 @@ password:"12345"
     $http.get(esslerloginapi,{
         })
         .success(function(data){
-            alert("==success=="+JSON.stringify(data));
+           // alert("==success=="+JSON.stringify(data));
 
 
             if(data.username==$scope.data.username)
             {
+              $("#loader").hide();
+
              $state.go('Esellerhome');
             }
             else
             {
-
-            alert("Inside the Failed");
+             $("#loader").hide();
+            //alert("Inside the Failed");
             $state.go('login');
             }
 
         })
         .error(function(data){
 
-            alert("==error=="+JSON.stringify(data));
+
+            $("#loader").hide(); 
+            //alert("==error=="+JSON.stringify(data));
         }); 
 
 
 }
-
-
-
-
-
-
 
 })
 
@@ -449,15 +589,10 @@ $scope.choice={};
 var product_url="http://127.0.0.1:8000/admin/UserAndAccess_App/product/add/";
       $scope.pushtodatabse = function() {
 
-
-
-     
       $scope.choice.qty, $scope.choice.price
       $scope.choice.selectedName
 
-       
-
-        alert("test function"+JSON.stringify($scope.choice));
+     //   alert("test function"+JSON.stringify($scope.choice));
       
         //console.log('Selected rating is : ', rating);
       }
@@ -465,9 +600,7 @@ var product_url="http://127.0.0.1:8000/admin/UserAndAccess_App/product/add/";
 
 $scope.loginEsseler = function() {
 
-
   alert("Inside the Esseler Login");
-
 
 
 //alert("Inside the Login Submit call"+$scope.data.username);
@@ -479,7 +612,6 @@ password:"12345"
 
 };*/
 
-
 // Triggered in the login modal to close it
   
 //alert("===="+JSON.stringify(fd));
@@ -487,7 +619,7 @@ password:"12345"
     $http.get(esslerloginapi,{
         })
         .success(function(data){
-            alert("==success=="+JSON.stringify(data));
+          //  alert("==success=="+JSON.stringify(data));
 
 
             if(data.username==$scope.data.username)
@@ -506,7 +638,6 @@ password:"12345"
 
             alert("==error=="+JSON.stringify(data));
         }); 
-
 
 }
 
@@ -522,28 +653,4 @@ $scope.choices = [{id: 'choice1'}];
     var lastItem = $scope.choices.length-1;
     $scope.choices.splice(lastItem);
   };
-
-
-
-
-
-
-
-
-
-
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
